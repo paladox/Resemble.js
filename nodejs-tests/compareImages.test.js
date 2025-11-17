@@ -7,9 +7,9 @@ const readFile = util.promisify(fs.readFile);
 
 describe("compareImages", () => {
     test("Buffers data", async () => {
-        const readImg1 = readFile("../demoassets/People.jpg");
-        const readImg2 = readFile("../demoassets/People2.jpg");
-        const readComparison = readFile("./assets/PeopleComparedToPeople2.png");
+        const readImg1 = readFile("./demoassets/People.jpg");
+        const readImg2 = readFile("./demoassets/People2.jpg");
+        const readComparison = readFile("./nodejs-tests/assets/PeopleComparedToPeople2.png");
 
         const data = await compareImages(await readImg1, await readImg2);
         const buffer = data.getBuffer();
@@ -23,9 +23,9 @@ describe("compareImages", () => {
     });
 
     test("Buffer data includeOriginal", async () => {
-        const readImg1 = readFile("../demoassets/People.jpg");
-        const readImg2 = readFile("../demoassets/People2.jpg");
-        const readComparison = readFile("./assets/PeopleComparedToPeople2WithOriginal.png");
+        const readImg1 = readFile("./demoassets/People.jpg");
+        const readImg2 = readFile("./demoassets/People2.jpg");
+        const readComparison = readFile("./nodejs-tests/assets/PeopleComparedToPeople2WithOriginal.png");
         const data = await compareImages(await readImg1, await readImg2);
         const buffer = data.getBuffer(true);
         const comparison = await readComparison;
@@ -33,19 +33,19 @@ describe("compareImages", () => {
     });
 
     test("throws when failed", async () => {
-        const promise = compareImages(fs.readFileSync("../demoassets/People.jpg"), "bogus data");
+        const promise = compareImages(fs.readFileSync("./demoassets/People.jpg"), "bogus data");
         await expect(promise).rejects.toMatch("Failed to load image 'bogus data'. Error: ENOENT, No such file or directory 'bogus data'");
     });
 
     test("throws when invalid image format", async () => {
         const invalidImageFormat = "data:,";
-        const promise = compareImages(invalidImageFormat, fs.readFileSync("../demoassets/People.jpg"));
+        const promise = compareImages(invalidImageFormat, fs.readFileSync("./demoassets/People.jpg"));
         await expect(promise).rejects.toMatch("Failed to load image 'data:,'. Error: Unsupported image type");
     });
 
     test("returns early", async () => {
-        const readImg1 = readFile("../demoassets/People.jpg");
-        const readImg2 = readFile("../demoassets/People2.jpg");
+        const readImg1 = readFile("./demoassets/People.jpg");
+        const readImg2 = readFile("./demoassets/People2.jpg");
         const options = {
             returnEarlyThreshold: 5
         };
